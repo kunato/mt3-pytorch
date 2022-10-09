@@ -4,6 +4,20 @@ This is an unofficial implementation of MT3: Multi-Task Multitrack Music Transcr
 
 ## Usage
 
+### Run MT3 in Docker
+
+Build docker image:
+```bash
+bash build_mt3_docker.sh
+```
+
+Run MT3 transcription:
+```bash
+docker run --rm -it --gpus all -v "${PWD}/input:/input" -v "${PWD}/output:/output" mt3
+```
+
+### Run MT3 in Python
+
 ```python
 from inference import InferenceHandler
 
