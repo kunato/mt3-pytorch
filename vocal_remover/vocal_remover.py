@@ -11,7 +11,7 @@ from .inference import Separator
 class VocalRemover:
     def __init__(self, pretrained_model = 'models/baseline.pth', 
             sr = 44100, n_fft = 2048, hop_length = 1024, batchsize = 4, 
-            cropsize = 256, tta = False, postprocess = False):
+            cropsize = 256, tta = False, postprocess = True):
 
         self.sr = sr
         self.n_fft = n_fft
@@ -45,7 +45,5 @@ class VocalRemover:
             y_spec, v_spec = sp.separate(X_spec)
 
         wave = spec_utils.spectrogram_to_wave(y_spec, hop_length=self.hop_length)
-
-        # TODO: mix X and wave based on v_spec intensity
 
         return wave, self.sr

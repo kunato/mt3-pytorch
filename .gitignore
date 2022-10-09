@@ -2,4 +2,4 @@ out/
 *.pyc
 main.py
 results/
-output/
+output*/
