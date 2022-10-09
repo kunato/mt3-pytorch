@@ -1,7 +1,7 @@
 FROM nvcr.io/nvidia/pytorch:21.06-py3
 
 RUN apt update && DEBIAN_FRONTEND=noninteractive \
-    apt install libsndfile1-dev ffmpeg -y && \
+    apt install libsndfile1-dev libflac-dev ffmpeg -y && \
     apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
 
