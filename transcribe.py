@@ -8,6 +8,7 @@ import pathlib
 import warnings
 import re
 import librosa
+import traceback
 
 warnings.filterwarnings('ignore', message='PySoundFile failed')
 warnings.filterwarnings('ignore', message='will be removed in v5 of Transformers')
@@ -32,14 +33,19 @@ def run_inference(audio_path_list, output_directory, overwrite, remove_vocals, m
         if (not overwrite and os.path.exists(midi_path)):
             print(f'SKIPPING: "{midi_path}"')    
         else:
-            print(f'LOADING: "{audio_path}"')
-            audio, audio_sr = librosa.load(audio_path)
-            if (remove_vocals):
-                print(f'PREPROCESSING (removing vocals): "{audio_path}"')
-                audio, audio_sr = voc_rem.predict(audio, audio_sr)
-            print(f'TRANSCRIBING: "{audio_path}"')
-            mt3.inference(audio, audio_sr, audio_path, outpath=midi_path)
-            print(f'SAVED: "{midi_path}"')
+            try:
+                print(f'LOADING: "{audio_path}"')
+                audio, audio_sr = librosa.load(audio_path)
+                if (remove_vocals):
+                    print(f'PREPROCESSING (removing vocals): "{audio_path}"')
+                    audio, audio_sr = voc_rem.predict(audio, audio_sr)
+                print(f'TRANSCRIBING: "{audio_path}"')
+                mt3.inference(audio, audio_sr, audio_path, outpath=midi_path)
+                print(f'SAVED: "{midi_path}"')
+            except Exception:
+                print(f'FAILED: "{midi_path}"')
+                print("")
+                print(traceback.format_exc())
 
 def natural_sort(l): 
     convert = lambda text: int(text) if text.isdigit() else text.lower()

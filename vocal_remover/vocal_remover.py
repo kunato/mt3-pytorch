@@ -46,4 +46,6 @@ class VocalRemover:
 
         wave = spec_utils.spectrogram_to_wave(y_spec, hop_length=self.hop_length)
 
+        # TODO: mix X and wave based on v_spec intensity
+
         return wave, self.sr
