@@ -4,11 +4,12 @@ import os
 import argparse
 import pathlib
 import warnings
+import re
 
 warnings.filterwarnings('ignore', message='PySoundFile failed')
 warnings.filterwarnings('ignore', message='will be removed in v5 of Transformers')
 
-def predict_and_save(audio_path_list, output_directory, model_path = "./pretrained"):
+def run_inference(audio_path_list, output_directory, overwrite, model_path = "./pretrained"):
 
     mt3 = InferenceHandler(model_path)
 
@@ -22,10 +23,17 @@ def predict_and_save(audio_path_list, output_directory, model_path = "./pretrain
         if not os.path.exists(os.path.dirname(midi_path)):
             os.makedirs(os.path.dirname(midi_path))
 
-        print(f'TRANSCRIBING: "{audio_path}"')
-        mt3.inference(audio_path, outpath=midi_path)
-        print(f'SAVED: "{midi_path}"')
+        if (not overwrite and os.path.exists(midi_path)):
+            print(f'SKIPPING: "{midi_path}"')    
+        else:
+            print(f'TRANSCRIBING: "{audio_path}"')
+            mt3.inference(audio_path, outpath=midi_path)
+            print(f'SAVED: "{midi_path}"')
 
+def natural_sort(l): 
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', str(key))]
+    return sorted(l, key=alphanum_key)
 
 if __name__ == "__main__":
 
@@ -37,6 +45,8 @@ if __name__ == "__main__":
     parser.add_argument("--extensions", nargs='+', type=str,
         default=["mp3", "wav", "flac"],
         help='input audio extensions')
+    parser.add_argument("--overwrite", action="store_true",
+        help='overwrite output files')
 
     args = parser.parse_args()
 
@@ -44,5 +54,6 @@ if __name__ == "__main__":
     for path in args.input:
         input_files.extend([p for e in args.extensions 
             for p in pathlib.Path(path).rglob("*." + e)])
+    input_files = natural_sort(input_files)
 
-    predict_and_save(input_files, args.output_folder)
+    run_inference(input_files, args.output_folder, args.overwrite)
