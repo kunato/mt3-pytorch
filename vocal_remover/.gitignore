@@ -1,0 +1,17 @@
+*.pyc
+*.npy
+*.npz
+*.json
+*.log
+
+*.jpg
+*.png
+
+*.wav
+*.m4a
+*.mp3
+*.mp4
+*.flac
+
+*~
+.vscode/

@@ -1,0 +1,7 @@
+out/
+*.pyc
+results/
+output*/
+Dockerfile
+*.bat
+*.sh
