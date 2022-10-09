@@ -49,7 +49,7 @@ def natural_sort(l):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("input", nargs='*', type=str, default="/input",
+    parser.add_argument("input", nargs='*', type=str, default=["/input"],
         help='input audio folders')
     parser.add_argument("--output-folder", type=str, default="/output",
         help='output midi folder')
