@@ -13,7 +13,8 @@ import traceback
 warnings.filterwarnings('ignore', message='PySoundFile failed')
 warnings.filterwarnings('ignore', message='will be removed in v5 of Transformers')
 
-def run_inference(audio_path_list, output_directory, overwrite, remove_vocals, model_path = "./pretrained"):
+def run_inference(audio_path_list, output_directory, 
+    overwrite, remove_vocals, model_path):
 
     mt3 = InferenceHandler(model_path)
     voc_rem = None
@@ -43,9 +44,9 @@ def run_inference(audio_path_list, output_directory, overwrite, remove_vocals, m
                 mt3.inference(audio, audio_sr, audio_path, outpath=midi_path)
                 print(f'SAVED: "{midi_path}"')
             except Exception:
-                print(f'FAILED: "{midi_path}"')
-                print("")
                 print(traceback.format_exc())
+                print("")
+                print(f'FAILED: "{midi_path}"')
 
 def natural_sort(l): 
     convert = lambda text: int(text) if text.isdigit() else text.lower()
@@ -62,10 +63,11 @@ if __name__ == "__main__":
     parser.add_argument("--extensions", nargs='+', type=str,
         default=["mp3", "wav", "flac"],
         help='input audio extensions')
-    parser.add_argument("--with-vocal-removal", action='store_true',
-        help='enable vocal removal preprocessing step')
+    parser.add_argument("--disable-vocal-removal", action='store_true',
+        help='disable vocal removal preprocessing step')
     parser.add_argument("--overwrite", action="store_true",
         help='overwrite output files')
+    parser.add_argument("--model-path", type=str, default="./pretrained")
 
     args = parser.parse_args()
 
@@ -76,4 +78,6 @@ if __name__ == "__main__":
     input_files = natural_sort(input_files)
 
     run_inference(input_files, args.output_folder, 
-        args.overwrite, args.with_vocal_removal)
+        overwrite = args.overwrite, 
+        remove_vocals = not args.disable_vocal_removal,
+        model_path = args.model_path),

@@ -1,7 +1,7 @@
 out/
 *.pyc
 results/
-output/
+output*/
 Dockerfile
 *.bat
 *.sh
