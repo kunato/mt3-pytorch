@@ -14,4 +14,3 @@ ADD . /app
 WORKDIR /app
 
 ENTRYPOINT ["python", "transcribe.py"]
-CMD ["/input", "--output-folder", "/output"]
