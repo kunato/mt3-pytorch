@@ -1,7 +1,3 @@
-from xmlrpc.client import boolean
-from inference import InferenceHandler
-from vocal_remover import VocalRemover
-
 import os
 import argparse
 import pathlib
@@ -9,6 +5,12 @@ import warnings
 import re
 import librosa
 import traceback
+
+import tensorflow as tf
+tf.config.set_visible_devices([], 'GPU')
+
+from inference import InferenceHandler
+from vocal_remover import VocalRemover
 
 warnings.filterwarnings('ignore', message='PySoundFile failed')
 warnings.filterwarnings('ignore', message='will be removed in v5 of Transformers')
